@@ -1,3 +1,6 @@
 spring:
   application:
     name: ficha-forge
+
+server:
+  port: 8080

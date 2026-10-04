@@ -1,13 +1,13 @@
-package br.com.ficha_forge;
+package br.com.fichaforge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FichaForgeApplication {
+public class Aplicacao {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FichaForgeApplication.class, args);
+		SpringApplication.run(Aplicacao.class, args);
 	}
 
 }
