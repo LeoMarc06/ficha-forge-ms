@@ -14,10 +14,7 @@ Além de seu propósito como aplicação, o **Ficha Forge** também está sendo 
 - Spring Boot
 - Spring Web
 - Spring Data JPA
-- MySQL
-- Flyway
-- Maven
-- Docker
+
 
 ## Objetivo do MVP
 
