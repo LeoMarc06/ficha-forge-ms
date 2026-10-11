@@ -1,60 +1,60 @@
 package br.com.fichaforge.apresentacao;
 
-import br.com.fichaforge.apresentacao.exception.RecursoNaoEncontradoException;
+import br.com.fichaforge.apresentacao.dto.CriarPersonagemRequest;
+import br.com.fichaforge.apresentacao.dto.PersonagemResponse;
 import br.com.fichaforge.dominio.personagem.Personagem;
+import br.com.fichaforge.servico.PersonagemServico;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Validated
 @RestController
 @RequestMapping("/personagem")
 public class PersonagemController {
 
+    private PersonagemServico servico = new PersonagemServico();
+
     @GetMapping
     public ResponseEntity<List<Personagem>> busca() {
-        Personagem p1 = mock("Jonatha");
-        Personagem p2 = mock("Marcelo");
-        Personagem p3 = mock("Edileuza");
-        Personagem p4 = mock("Cicilio");
-
-        return ResponseEntity.ok(Arrays.asList(p1,p2,p3,p4));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> busca(@PathVariable(name = "id") Long id) {
-        if(id == 1)
-            throw new RecursoNaoEncontradoException("ID não encontrado", new IllegalAccessException("dde Bo"));
-
-        return ResponseEntity.ok(new Personagem(id, "Jonathan"));
+        Personagem personagem = servico.busca(id);
+        return ResponseEntity.ok(PersonagemResponse.from(personagem));
     }
 
-    public ResponseEntity<?> cria(Personagem personagem) {
-        return ResponseEntity.ok(personagem);
+    @PostMapping
+    public ResponseEntity<PersonagemResponse> cria(@Valid @RequestBody CriarPersonagemRequest request) {
+        var personagem = request.toModel();
+        Personagem personagemCriado = servico.cria(personagem);
+        return ResponseEntity.ok(PersonagemResponse.from(personagemCriado));
     }
 
-    public ResponseEntity<?> cria(List<Object> personagens) {
-        return ResponseEntity.ok(personagens);
+    @PatchMapping("/renomeia/{id}/novo-nome/{novo-nome}")
+    public ResponseEntity<PersonagemResponse> renomeia( @PathVariable("id") Long id , @PathVariable("novo-nome") String nomeNome) {
+        Personagem personagemEncontrado = servico.busca(id);
+        personagemEncontrado.renomeia(nomeNome);
+
+        return ResponseEntity.ok(PersonagemResponse.from(personagemEncontrado));
+    }
+
+
+    public ResponseEntity<?> cria(List<Personagem> personagens) {
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> atualiza(List<Object> personagens) {
-        return ResponseEntity.ok(personagens);
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> atualiza(Object personagem) {
-        return ResponseEntity.ok(personagem);
+        return ResponseEntity.ok().build();
     }
-
-    private Personagem mock(String nome) {
-        return new Personagem(new Random().nextLong(), nome);
-    }
-
 
 }
